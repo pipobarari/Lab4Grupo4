@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Button, StyleSheet, TextInput } from "react-native";
 import * as Location from "expo-location";
 import * as Linking from "expo-linking";
-import  * as Clipboard from "expo-clipboard";
+import * as Clipboard from "expo-clipboard";
 
 const LocationScreen = () => {
   const [location, setLocation] = useState(null);
+  const [whatsAppLink, setWhatsAppLink] = useState(null);
 
   useEffect(() => {
     getCurrentLocation();
@@ -34,8 +35,14 @@ const LocationScreen = () => {
       // Copiar el enlace al portapapeles
       Clipboard.setString(url);
 
-      // Abrir WhatsApp
-      Linking.openURL(url);
+      // Guardar el enlace en el estado
+      setWhatsAppLink(url);
+    }
+  };
+
+  const sendWhatsAppLink = () => {
+    if (whatsAppLink) {
+      Linking.openURL(whatsAppLink);
     }
   };
 
@@ -48,8 +55,8 @@ const LocationScreen = () => {
           Latitud: {location.latitude}, Longitud: {location.longitude}
         </Text>
       )}
-      <Text style={styles.heading}>Ingresa los datos del volcán:</Text>
 
+      <Text style={styles.heading}>Ingresa los datos del volcán:</Text>
       <TextInput style={styles.input} placeholder="Nombre del volcán" />
       <TextInput style={styles.input} placeholder="Altura del volcán" />
       <TextInput style={styles.input} placeholder="Tipo (activo/pasivo)" />
@@ -59,6 +66,13 @@ const LocationScreen = () => {
         title="Generar enlace de WhatsApp"
         onPress={generateWhatsAppLink}
         disabled={!location}
+      />
+     <View style={{ height: 10 }}></View>
+      <Button
+        title="Enviar enlace por WhatsApp"
+        onPress={sendWhatsAppLink}
+        disabled={!whatsAppLink}
+        color={"#00580F"}
       />
     </View>
   );
@@ -81,12 +95,16 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   input: {
-    width: '100%',
+    width: "100%",
     height: 40,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
     marginBottom: 16,
     paddingHorizontal: 8,
+  },
+  sendButtonWhats: {
+    backgroundColor: "green",
+    marginTop: 16,
   },
 });
 
