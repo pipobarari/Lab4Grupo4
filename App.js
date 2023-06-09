@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Button, StyleSheet, TextInput } from "react-native";
 import * as Location from "expo-location";
-import { Linking, Clipboard } from "expo";
+import * as Linking from "expo-linking";
+import  * as Clipboard from "expo-clipboard";
 
 const LocationScreen = () => {
   const [location, setLocation] = useState(null);
